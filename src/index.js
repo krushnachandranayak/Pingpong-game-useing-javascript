@@ -1,159 +1,123 @@
-//this is javascript code written by Krushna Chandra Nayak
+// JavaScript improved by Krushna Chandra Nayak
+document.addEventListener('DOMContentLoaded', function () {
+  const ball = document.getElementById('ball');
+  const paddleTop = document.getElementById('paddletop');
+  const paddleBottom = document.getElementById('paddlebottom');
+  const container = document.getElementById('container');
+  const scoreRod1 = document.getElementById('scoreRod1');
+  const scoreRod2 = document.getElementById('scoreRod2');
 
-//accessing ball and paddle
+  let ballX = container.clientWidth / 2 - ball.offsetWidth / 2;
+  let ballY = container.clientHeight / 2 - ball.offsetHeight / 2;
+  let ballSpeedX = 0;
+  let ballSpeedY = 0;
 
-var ball = document.getElementById("ball");
-console.log(ball);
-var paddletop = document.getElementById("paddletop");
-console.log(ball);
-var paddlebottom = document.getElementById("paddlebottom");
-console.log(ball);
-
-//variable for game start
-var score;
-var maxScore;
-var movement;
-var paddle;
-var ballXspeed = 3;
-var ballYspeed = 3;
-var gameStart = false;
-
-var playerName = "Player1Name";
-var prevScore = "PPMaxScore";
-var paddletoptName = "player 1";
-var paddlebottomName = "player 2";
-
-// height & widht of window
-
-var windowHeight = window.innerHeight;
-var windowWidth = window.innerWidth;
-
-//message alert for staring game with iife function
-
-(function () {
-  paddle = localStorage.getItem(playerName);
-  maxScore = localStorage.getItem(maxScore);
-
-  if (paddle === "null" || maxScore === "null") {
-    alert("This is the first time you are playing this game, Let's Start it!");
-    maxScore = 0;
-    paddle = paddletop;
-  } else {
-    alert(paddle + "has maximum score of " + maxScore * 50);
-  }
-  resetBoard(paddle);
-})();
-
-//for reset
-
-function resetBoard(paddleName) {
-  paddletop.style.left =
-    (window.innerWidth - paddletop.offsetHeight) / 2 + "px";
-  paddlebottom.style.left =
-    (window.innerWidth - paddlebottom.offsetHeight) / 2 + "px";
-  ball.style.left = (windowWidth - ball.offsetHeight) / 2 + "px";
-
-  //lossing player
-  if (paddleName === paddlebottomName) {
-    ball.style.top = paddletop.offsetTop + paddletop.offsetHeight + "px";
-    ballYspeed = 2;
-  } else if (paddleName === paddletoptName) {
-    ball.style.top = paddlebottom.offsetTop + paddlebottom.offsetHeight + "px";
-    ballYspeed = -2;
-  }
-
-  score = 0;
-  gameStart = false;
-}
-
-// for wining
-
-function storeWin(paddle, score) {
-  if (score > maxScore) {
-    //update maximum score which are store
-    maxScore = score;
-    localStorage.setItem(playerName, paddle);
-    localStorage.setItem(prevScore, maxScore);
-  }
-
-  clearInterval(movement);
-  resetBoard(paddle);
-
-  alert(
-    paddle +
-      " wins with a score of " +
-      score * 100 +
-      ". Max score is: " +
-      maxScore * 100
-  );
-}
-
-//adding event for playing game
-window.addEventListener("keypress", function () {
   let paddleSpeed = 20;
-  let paddleRect = paddletop.getBoundingClientRect();
-  // let paddleRect2 = paddlebottom.getBoundingClientRect();
+  let paddleWidth = paddleTop.offsetWidth;
+  let paddleTopX = container.clientWidth / 2 - paddleWidth / 2;
+  let paddleBottomX = paddleTopX;
 
-  if (
-    event.code === "KeyA" &&
-    paddleRect.x + paddleRect.width < window.innerWidth
-  ) {
-    paddletop.style.left = paddleRect.x + paddleSpeed + "px";
-    paddlebottom.style.left = paddleRect.x + paddleSpeed + "px";
-  } else if (event.code === "KeyD" && paddleRect.x > 0) {
-    paddletop.style.left = paddleRect.x - paddleSpeed + "px";
-    paddlebottom.style.left = paddleRect.x - paddleSpeed + "px";
-  }
+  let scoreTop = 0;
+  let scoreBottom = 0;
 
-  if (event.code === "Enter") {
-    if (!gameStart) {
-      gameStart = true;
-      let ballRect = ball.getBoundingClientRect();
-      let ballX = ballRect.x;
-      let ballY = ballRect.y;
-      let ballDia = ballRect.width;
+  let gameStarted = false;
 
-      let paddletopHeight = paddletop.offsetHeight;
-      let paddlebottomHeight = paddlebottom.offsetHeight;
-      let paddletopWidth = paddletop.offsetWidth;
-      let paddlebottomWidth = paddlebottom.offsetWidth;
+  // Move paddles using 'A' and 'D' keys
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'a' || event.key === 'A') {
+      // Move left, but prevent going out of the container
+      paddleTopX = Math.max(paddleTopX - paddleSpeed, 0);
+      paddleBottomX = Math.max(paddleBottomX - paddleSpeed, 0);
+    } else if (event.key === 'd' || event.key === 'D') {
+      // Move right, but prevent exceeding container width minus paddle width
+      paddleTopX = Math.min(paddleTopX + paddleSpeed, container.clientWidth - paddleWidth);
+      paddleBottomX = Math.min(paddleBottomX + paddleSpeed, container.clientWidth - paddleWidth);
+    }
 
-      movement = this.setInterval(function () {
-        //move ball
-        ballX += ballXspeed;
-        ballY += ballYspeed;
+    paddleTop.style.left = paddleTopX + 'px';
+    paddleBottom.style.left = paddleBottomX + 'px';
+  });
 
-        let paddletopX = paddletop.getBoundingClientRect().x;
-        let paddlebottomX = paddlebottom.getBoundingClientRect().x;
+  // Start game on 'Enter' key press
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter' && !gameStarted) {
+      gameStarted = true;
+      resetBall();
+      ballSpeedX = 3;
+      ballSpeedY = 3;
+      moveBall();
+    }
+  });
 
-        ball.style.left = ballX + "px";
-        ball.style.top = ballY + "px";
+  function moveBall() {
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
 
-        if (ballX + ballDia > windowWidth || ballX < 0) {
-          ballXspeed = -ballXspeed;
-        }
+    // Ball hits the left or right walls
+    if (ballX <= 0 || ballX >= container.clientWidth - ball.offsetWidth) {
+      ballSpeedX = -ballSpeedX;
+    }
 
-        let ballPos = ballX + ballDia / 2;
+    // Ball hits the paddles
+    if (
+      (ballY <= paddleTop.offsetHeight && ballX >= paddleTopX && ballX <= paddleTopX + paddleWidth) ||
+      (ballY >= container.clientHeight - paddleBottom.offsetHeight - ball.offsetHeight &&
+        ballX >= paddleBottomX && ballX <= paddleBottomX + paddleWidth)
+    ) {
+      ballSpeedY = -ballSpeedY;
+    }
 
-        if (ballY <= paddletopHeight) {
-          ballYspeed = -ballYspeed;
-          score += 1;
+    // Ball goes out (Top loses or Bottom loses)
+    if (ballY < 0) {
+      scoreBottom++;
+      scoreRod2.textContent = scoreBottom; // Update Rod 2's score
+      gameStarted = false;
+      resetGame('Rod 1 loses! Rod 2 serves next.');
+    }
 
-          if (ballPos < paddletopX || ballPos > paddletopX + paddletopWidth) {
-            storeWin(paddlebottomName, score);
-          }
-        } else if (ballY + ballDia >= windowHeight - paddlebottomHeight) {
-          ballYspeed = -ballYspeed;
-          score++;
+    if (ballY > container.clientHeight - ball.offsetHeight) {
+      scoreTop++;
+      scoreRod1.textContent = scoreTop; // Update Rod 1's score
+      gameStarted = false;
+      resetGame('Rod 2 loses! Rod 1 serves next.');
+    }
 
-          if (
-            ballPos < paddlebottomX ||
-            ballPos > paddlebottomX + paddlebottomWidth
-          ) {
-            storeWin(paddletop, score);
-          }
-        }
-      }, 10);
+    ball.style.left = ballX + 'px';
+    ball.style.top = ballY + 'px';
+
+    if (gameStarted) {
+      requestAnimationFrame(moveBall);
     }
   }
+
+  function resetGame(message) {
+    alert(`${message}\nScore: Rod 1: ${scoreTop}, Rod 2: ${scoreBottom}`);
+    resetBall();
+  }
+
+  function resetBall() {
+    ballX = container.clientWidth / 2 - ball.offsetWidth / 2;
+    ballY = container.clientHeight / 2 - ball.offsetHeight / 2;
+    ball.style.left = ballX + 'px';
+    ball.style.top = ballY + 'px';
+    ballSpeedX = 0;
+    ballSpeedY = 0;
+  }
 });
+
+// Function to handle rod movement with boundary check
+function moveRod(e) {
+  let rodSpeed = 20;
+  let rodLeft = parseInt(window.getComputedStyle(rod1).getPropertyValue('left'));
+  let containerWidth = document.getElementById('container').offsetWidth;
+  
+  if (e.key === 'a' && rodLeft > 0) {
+    rod1.style.left = rodLeft - rodSpeed + 'px';
+    rod2.style.left = rodLeft - rodSpeed + 'px';
+  }
+  
+  if (e.key === 'd' && (rodLeft + rod1.offsetWidth) < containerWidth) {
+    rod1.style.left = rodLeft + rodSpeed + 'px';
+    rod2.style.left = rodLeft + rodSpeed + 'px';
+  }
+}
