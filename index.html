@@ -1,24 +1,27 @@
-<!-- this is html code written by Krushna Chandra Nayak -->
+<!--Updated by Krushna Chandra Nayak -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- link for external css -->
     <link rel="stylesheet" href="src/styles.css" />
-    <title>Krushna Ping Pong Game</title>
+    <title>Krushna's Ping Pong Game</title>
   </head>
   <body>
+    <h1>Ping Pong Game</h1>
+    <div id="score">
+      <p>Rod 1: <span id="scoreRod1">0</span> | Rod 2: <span id="scoreRod2">0</span></p>
+    </div>
     <div id="container">
       <div class="ball" id="ball"></div>
       <div class="paddletop" id="paddletop">Rod 1</div>
       <div class="paddlebottom" id="paddlebottom">Rod 2</div>
     </div>
 
-    <!-- To play this game use 'A' for left move of Rod and 'D' is used for right side of Rod -->
+    <p>Press 'Enter' to start the game. Use 'A' for left and 'D' for right move of the rods.</p>
 
-    <!-- Link of extern script file -->
+    <!-- Link to the external script file -->
     <script src="src/index.js"></script>
   </body>
 </html>
