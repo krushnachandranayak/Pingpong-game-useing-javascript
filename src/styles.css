@@ -1,47 +1,86 @@
-/*this is css code written by Krushna Chandra Nayak*/
+/* CSS Code Updated by Krushna Chandra Nayak */
 * {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
+body {
+  background-color: #333;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 20px;
+}
+
+p{
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  unicode-bidi: isolate;
+}
+
 #container {
+  width: 700px; /* Increased container width */
+  height: 500px; /* Increased container height */
+  border: 3px solid white;
+  margin: 0 auto;
   position: relative;
+  background-color: #3a3a3a;
 }
 
 .ball {
-  position: fixed;
+  position: absolute;
   background-color: red;
-  top: 31px;
-  left: 60px;
-  /* margin-left: 40vh; */
   border-radius: 50%;
   width: 25px;
   height: 25px;
 }
 
-/*Rod*/
 .paddletop,
 .paddlebottom {
-  position: fixed;
-  height: 30px;
-  width: 200px;
-  left: 50%;
-  border-radius: 25px;
-  /* color: #fff; */
+  position: absolute;
+  height: 20px;
+  width: 140px; /* Adjust rod width */
+  border-radius: 10px;
   color: white;
-  font-weight: 800;
   text-align: center;
-  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
 }
 
 .paddletop {
   background-color: blue;
-  /* top: 0px; */
+  top: 0;
 }
 
 .paddlebottom {
-  background-color: blueviolet;
-  bottom: 0px;
-  /* height: 50px; */
+  background-color: violet;
+  bottom: 0;
+}
+
+#scoreRod1, #scoreRod2 {
+  font-size: 20px;
+  color: yellow;
+  margin-top: 10px;
+}
+
+/* Centering Title and Score */
+h1 {
+  font-size: 32px;
+  margin-bottom: 5px;
+  color: #f0c674;
+}
+
+#score {
+  font-size: 24px;
+  margin: 5px 0 15px 0;
+}
+
+footer {
+  margin-top: 20px;
+  font-size: 16px;
+  color: lightgrey;
 }
